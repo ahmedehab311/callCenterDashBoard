@@ -207,7 +207,7 @@
 
 // export default HomePage;
 
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Header from "./Header/Header.jsx";
 import CardContent from "./CardContent/CardContent.jsx";
 import NewUser from "./NewUser/NewUser.jsx";
@@ -257,13 +257,6 @@ function HomePage() {
     setFilteredCustomers([]);
   };
 
-  // const handleEditAddress = (customerIndex, addressIndex, newAddress) => {
-  //   const updatedCustomers = [...filteredCustomers];
-  //   updatedCustomers[customerIndex].addresses[addressIndex] = newAddress;
-  //   setFilteredCustomers(updatedCustomers);
-  //   saveToLocalStorage(updatedCustomers);
-  // };
-
   const handleConfirmEdit = () => {
     if (newAddress.trim()) {
       const updatedCustomers = [...filteredCustomers];
@@ -288,13 +281,7 @@ function HomePage() {
       setEditIndex(null);
     }
   };
-  // const handleAddAddress = (customerIndex, newAddress) => {
-  //   const updatedCustomers = [...filteredCustomers];
-  //   updatedCustomers[customerIndex].addresses.push(newAddress);
-  //   setFilteredCustomers(updatedCustomers);
-  //   saveToLocalStorage(updatedCustomers);
-  // };
-  
+
   const handlePopupSubmit = () => {
     const { name, number, place, address } = newCustomerData;
     if (name.trim() && number.trim() && place.trim() && address.trim()) {
@@ -358,6 +345,7 @@ function HomePage() {
               handleClear={handleClear}
               handleKeyDown={handleKeyDown}
               showTable={showTable}
+              setShowTable={setShowTable}
               filteredCustomers={filteredCustomers}
               handleConfirmEdit={handleConfirmEdit}
               isEditing={isEditing}
