@@ -7,7 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 function Header() {
   return (
-    <header className="flex justify-between">
+    <header className="flex justify-between p-2 items-center">
       <div className="logoImg">
         <img src={logo} alt="logo" />
       </div>
