@@ -1,4 +1,3 @@
-
 // import  { useState, useEffect } from 'react'
 // function OrderCard() {
 //   const [customerNumber, setCustomerNumber] = useState('');
@@ -247,30 +246,71 @@
 
 // export default OrderCard;
 
-
-
-
-import  { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 function OrderCard() {
-const [customerNumber,setCustomerNumber] = useState('')
+  const [customerNumber, setCustomerNumber] = useState("");
 
-const [showTable,setShowTable] = useState('')
+  const [showTable, setShowTable] = useState("");
 
-const [customers, setCustomers] = useState([
-    { name: 'Badr ElTaher', number: '01014097665', place: 'Home', addresses: ['11 Ahmed Khashaba - Nozha'] },
-    { name: 'Ali Mohamed', number: '01015012345', place: 'Office', addresses: ['22 Salah El-Din St.'] },
-    { name: 'Sara Ahmed', number: '01016054321', place: 'Home', addresses: ['33 Elm St.'] },
-    { name: 'Mona Ali', number: '01017098765', place: 'Work', addresses: ['44 Nile St.'] },
+  const [customers, setCustomers] = useState([
+    {
+      name: "Badr ElTaher",
+      number: "01014097665",
+      place: "Home",
+      addresses: ["11 Ahmed Khashaba - Nozha"],
+    },
+    {
+      name: "Ali Mohamed",
+      number: "01015012345",
+      place: "Office",
+      addresses: ["22 Salah El-Din St."],
+    },
+    {
+      name: "Sara Ahmed",
+      number: "01016054321",
+      place: "Home",
+      addresses: ["33 Elm St."],
+    },
+    {
+      name: "Mona Ali",
+      number: "01017098765",
+      place: "Work",
+      addresses: ["44 Nile St."],
+    },
   ]);
 
   const [filteredCustomers, setFilteredCustomers] = useState([]);
 
-  const [isEditing,setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
-  const [editIndex,setIndex] = useState(null);
+  const [editIndex, setIndex] = useState(null);
 
-  const [showPopup,setShowPopup] = useState('false');
-  const [newCustomerData, setNewCustomerData] = useState({ name: '', number: '', place: '', address: '' });
+  const [showPopup, setShowPopup] = useState("false");
+  const [newCustomerData, setNewCustomerData] = useState({
+    name: "",
+    number: "",
+    place: "",
+    address: "",
+  });
+
+  const handleSearch = () => {
+    const filtered = customers.filter(
+      (customer) => customer.number === customerNumber
+    );
+    setFilteredCustomers(filtered);
+    setShowTable(filtered.length > 0)
+  };
+
+
+  const handleClear =() => {
+    setCustomerNumber('');
+    setShowTable(false);
+    setFilteredCustomers([])
+  }
+  const handleEditAddress = (customerIndex,addressIndex) => {
+    setIsEditing(true);
+    setEditIndex({customerIndex,addressIndex})
+  }
   return (
     <div className="flex justify-center items-center ">
       <div className="bg-white shadow-lg rounded-lg p-6 ">
@@ -284,10 +324,16 @@ const [customers, setCustomers] = useState([
             onKeyDown={handleKeyDown} // Trigger search on Enter key
             className="border rounded-l-md p-2 w-full"
           />
-          <button onClick={handleSearch} className="bg-blue-500 text-white rounded-r-md p-2">
+          <button
+            onClick={handleSearch}
+            className="bg-blue-500 text-white rounded-r-md p-2"
+          >
             Search
           </button>
-          <button onClick={handleClear} className="bg-gray-300 text-black rounded-md p-2 ml-2">
+          <button
+            onClick={handleClear}
+            className="bg-gray-300 text-black rounded-md p-2 ml-2"
+          >
             Clear
           </button>
         </div>
@@ -313,8 +359,13 @@ const [customers, setCustomers] = useState([
                     <td className="border px-4 py-2">{customer.place}</td>
                     <td className="border px-4 py-2">
                       {customer.addresses.map((address, addressIndex) => (
-                        <div key={addressIndex} className="flex items-center mb-2">
-                          {isEditing && editIndex?.customerIndex === customerIndex && editIndex?.addressIndex === addressIndex ? (
+                        <div
+                          key={addressIndex}
+                          className="flex items-center mb-2"
+                        >
+                          {isEditing &&
+                          editIndex?.customerIndex === customerIndex &&
+                          editIndex?.addressIndex === addressIndex ? (
                             <input
                               type="text"
                               value={newAddress}
@@ -324,7 +375,9 @@ const [customers, setCustomers] = useState([
                           ) : (
                             <span className="mr-2">{address}</span>
                           )}
-                          {isEditing && editIndex?.customerIndex === customerIndex && editIndex?.addressIndex === addressIndex ? (
+                          {isEditing &&
+                          editIndex?.customerIndex === customerIndex &&
+                          editIndex?.addressIndex === addressIndex ? (
                             <button
                               onClick={handleConfirmEdit}
                               className="bg-green-500 text-white rounded p-1"
@@ -333,7 +386,9 @@ const [customers, setCustomers] = useState([
                             </button>
                           ) : (
                             <button
-                              onClick={() => handleEditAddress(customerIndex, addressIndex)}
+                              onClick={() =>
+                                handleEditAddress(customerIndex, addressIndex)
+                              }
                               className="bg-yellow-500 text-white rounded p-1"
                             >
                               Edit
@@ -343,7 +398,9 @@ const [customers, setCustomers] = useState([
                       ))}
                     </td>
                     <td className="border px-4 py-2">
-                      <button className="bg-red-500 text-white rounded p-1">Delete</button>
+                      <button className="bg-red-500 text-white rounded p-1">
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -365,32 +422,54 @@ const [customers, setCustomers] = useState([
         {showPopup && (
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
             <div className="bg-white p-6 rounded shadow-lg popup-content">
-              <h3 className="text-lg font-bold mb-4">Add New Customer & Address</h3>
+              <h3 className="text-lg font-bold mb-4">
+                Add New Customer & Address
+              </h3>
               <input
                 type="text"
                 value={newCustomerData.name}
-                onChange={(e) => setNewCustomerData({ ...newCustomerData, name: e.target.value })}
+                onChange={(e) =>
+                  setNewCustomerData({
+                    ...newCustomerData,
+                    name: e.target.value,
+                  })
+                }
                 className="border rounded p-2 w-full mb-2"
                 placeholder="Enter Name"
               />
               <input
                 type="text"
                 value={newCustomerData.number}
-                onChange={(e) => setNewCustomerData({ ...newCustomerData, number: e.target.value })}
+                onChange={(e) =>
+                  setNewCustomerData({
+                    ...newCustomerData,
+                    number: e.target.value,
+                  })
+                }
                 className="border rounded p-2 w-full mb-2"
                 placeholder="Enter Number"
               />
               <input
                 type="text"
                 value={newCustomerData.place}
-                onChange={(e) => setNewCustomerData({ ...newCustomerData, place: e.target.value })}
+                onChange={(e) =>
+                  setNewCustomerData({
+                    ...newCustomerData,
+                    place: e.target.value,
+                  })
+                }
                 className="border rounded p-2 w-full mb-2"
                 placeholder="Enter Place"
               />
               <input
                 type="text"
                 value={newCustomerData.address}
-                onChange={(e) => setNewCustomerData({ ...newCustomerData, address: e.target.value })}
+                onChange={(e) =>
+                  setNewCustomerData({
+                    ...newCustomerData,
+                    address: e.target.value,
+                  })
+                }
                 className="border rounded p-2 w-full mb-2"
                 placeholder="Enter Address"
               />
@@ -409,4 +488,3 @@ const [customers, setCustomers] = useState([
 }
 
 export default OrderCard;
-
