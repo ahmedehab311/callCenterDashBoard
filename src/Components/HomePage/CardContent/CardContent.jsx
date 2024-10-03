@@ -306,14 +306,13 @@ function OrderCard({
 
   const handleAddAddress = () => {
     const updatedCustomers = [...filteredCustomers];
-    // إضافة بيانات جديدة للعميل
-    const newCustomer = { ...newCustomerData, addresses: [newAddress] }; // إعداد العميل الجديد
-    updatedCustomers.push(newCustomer); // إضافة العميل الجديد إلى القائمة
+    const newCustomer = { ...newCustomerData, addresses: [newAddress] };
+    updatedCustomers.push(newCustomer); 
     setFilteredCustomers(updatedCustomers);
     saveToLocalStorage(updatedCustomers);
-    setNewCustomerData({ name: "", number: "", place: "" }); // إعادة تعيين الحقول
+    setNewCustomerData({ name: "", number: "", place: "" }); 
     setNewAddress("");
-    setIsPopupVisible(false); // إغلاق النافذة المنبثقة بعد الإضافة
+    setIsPopupVisible(false); 
   };
 
   const handleDeleteAddress = (customerIndex, addressIndex) => {
@@ -332,13 +331,13 @@ function OrderCard({
   };
 
   const handleSearch = () => {
-    const customers = loadFromLocalStorage(); // Load the latest data
+    const customers = loadFromLocalStorage(); 
     const filtered = customers.filter((customer) =>
       customer.number.includes(customerNumber)
     );
 
-    setFilteredCustomers(filtered); // Update filteredCustomers with the latest data
-    setNoResults(filtered.length === 0); // Update noResults based on filtered results
+    setFilteredCustomers(filtered);
+    setNoResults(filtered.length === 0); 
   };
 
   return (
@@ -455,9 +454,7 @@ function OrderCard({
           >
             Add New Address
           </button>
-
-          {/* نافذة منبثقة لإضافة عنوان جديد */}
-          {isPopupVisible && (
+         {isPopupVisible && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
               <div className="bg-white rounded-lg p-4">
                 <h3 className="text-md font-bold mb-2">Add New Address</h3>
