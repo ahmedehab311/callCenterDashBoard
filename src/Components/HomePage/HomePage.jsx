@@ -207,11 +207,12 @@
 
 // export default HomePage;
 
-import {  useState } from "react";
+import { useState } from "react";
 import Header from "./Header/Header.jsx";
 import CardContent from "./CardContent/CardContent.jsx";
 import NewUser from "./NewUser/NewUser.jsx";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 function HomePage() {
   const [customerNumber, setCustomerNumber] = useState("");
   const [isCreateOrder, setIsCreateOrder] = useState(true);
@@ -229,19 +230,18 @@ function HomePage() {
       place: "Home",
       addresses: ["11 Ahmed Khashaba - sdasda"],
     },
-
   ]);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
-  const [newAddress, setNewAddress] = useState(""); 
+  const [newAddress, setNewAddress] = useState("");
   const [newCustomerData, setNewCustomerData] = useState({
     name: "",
     number: "",
     place: "",
     address: "",
-  }); 
-
+  });
+  // const [isCreateOrder, setIsCreateOrder] = useState(true);
 
   const handleSearch = () => {
     const filtered = customers.filter(
@@ -252,7 +252,7 @@ function HomePage() {
   };
 
   const handleClear = () => {
-    setCustomerNumber('');
+    setCustomerNumber("");
     setShowTable(false);
     setFilteredCustomers([]);
   };
@@ -265,7 +265,6 @@ function HomePage() {
       ] = newAddress;
       setFilteredCustomers(updatedCustomers);
 
-      // تحديث مصفوفة العملاء الرئيسية
       setCustomers((prevCustomers) => {
         const updatedAllCustomers = [...prevCustomers];
         const customerIndexInAll = customers.findIndex(
@@ -294,7 +293,6 @@ function HomePage() {
       });
       setFilteredCustomers(updatedCustomers);
 
-      // تحديث مصفوفة العملاء الرئيسية
       setCustomers((prevCustomers) => [
         ...prevCustomers,
         {
@@ -317,53 +315,61 @@ function HomePage() {
 
   return (
     <>
+      <div>
+        <Header />
+        <div className="flex justify-center items-center text-center p-6">
+          <div className="bg-white shadow-lg rounded-lg p-[5rem] relative">
+            <div className="absolute top-0 -left-0 flex space-x-1">
+              <button
+                onClick={() => setIsCreateOrder(true)}
+                className={`${
+                  isCreateOrder
+                    ? "bg-primary  text-white : "
+                    : "bg-[#283d3b2d] text-black"
+                } p-3 shadow-lg rounded-tl-none rounded-tr-none rounded-bl-none rounded-br-[1rem] font-medium text-[1rem]`}
+              >
+                Create order
+              </button>
+              <button
+                onClick={() => setIsCreateOrder(false)}
+                className={`${
+                  !isCreateOrder
+                    ? " bg-primary  text-white"
+                    : "bg-[#283d3b3d] text-[#283D3B]"
+                } shadow-lg rounded-tl-none rounded-tr-none rounded-bl-none rounded-br-[1rem] p-3 font-medium`}
+              >
+                <FontAwesomeIcon icon={faUser} className="mr-2" />
+                New User
+              </button>
+            </div>
 
-<div  >
-<Header />
-      <div className="flex justify-center items-center text-center p-6">
-        <div className="bg-white shadow-lg rounded-lg p-[5rem] relative">
-          <div className="absolute top-0 -left-0 flex space-x-1">
-            <button
-              onClick={() => setIsCreateOrder(true)}
-              className="bg-blue-500 text-white p-3 shadow-lg"
-            >
-              Create order
-            </button>
-            <button
-              onClick={() => setIsCreateOrder(false)}
-              className="bg-gray-300 text-black p-3 shadow-lg"
-            >
-              New User
-            </button>
+            {isCreateOrder ? (
+              <CardContent
+                customerNumber={customerNumber}
+                setCustomerNumber={setCustomerNumber}
+                handleSearch={handleSearch}
+                handleClear={handleClear}
+                handleKeyDown={handleKeyDown}
+                showTable={showTable}
+                setShowTable={setShowTable}
+                filteredCustomers={filteredCustomers}
+                handleConfirmEdit={handleConfirmEdit}
+                isEditing={isEditing}
+                editIndex={editIndex}
+                newAddress={newAddress}
+                setNewAddress={setNewAddress}
+                setFilteredCustomers={setFilteredCustomers}
+              />
+            ) : (
+              <NewUser
+                newCustomerData={newCustomerData}
+                setNewCustomerData={setNewCustomerData}
+                handlePopupSubmit={handlePopupSubmit}
+              />
+            )}
           </div>
-
-          {isCreateOrder ? (
-            <CardContent
-              customerNumber={customerNumber}
-              setCustomerNumber={setCustomerNumber}
-              handleSearch={handleSearch}
-              handleClear={handleClear}
-              handleKeyDown={handleKeyDown}
-              showTable={showTable}
-              setShowTable={setShowTable}
-              filteredCustomers={filteredCustomers}
-              handleConfirmEdit={handleConfirmEdit}
-              isEditing={isEditing}
-              editIndex={editIndex}
-              newAddress={newAddress}
-              setNewAddress={setNewAddress}
-              setFilteredCustomers={setFilteredCustomers}
-            />
-          ) : (
-            <NewUser
-              newCustomerData={newCustomerData}
-              setNewCustomerData={setNewCustomerData}
-              handlePopupSubmit={handlePopupSubmit}
-            />
-          )}
         </div>
       </div>
-</div>
     </>
   );
 }
