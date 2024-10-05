@@ -212,8 +212,11 @@ import Header from "./Header/Header.jsx";
 import CardContent from "./CardContent/CardContent.jsx";
 import NewUser from "./NewUser/NewUser.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+
 function HomePage() {
+  const navigate = useNavigate();
   const [customerNumber, setCustomerNumber] = useState("");
   const [isCreateOrder, setIsCreateOrder] = useState(true);
   const [showTable, setShowTable] = useState(false);
@@ -225,10 +228,35 @@ function HomePage() {
       addresses: ["11 Ahmed Khashaba - Nozha"],
     },
     {
-      name: "ahahah",
+      name: "Badr ElTaher",
+      number: "01014097665",
+      place: "word",
+      addresses: [" 11 manyal - Nozha"],
+    },
+    {
+      name: "Badr ElTaher",
+      number: "01014097665",
+      place: "office",
+      addresses: ["matbaa-haram"],
+    },
+
+    {
+      name: "ahmed",
       number: "12345",
       place: "Home",
-      addresses: ["11 Ahmed Khashaba - sdasda"],
+      addresses: ["11 Ahmed Khashaba - 11 manyal - Nozha"],
+    },
+    {
+      name: "ahmed",
+      number: "12345",
+      place: "office",
+      addresses: [" 11 manyal - giza"],
+    },
+    {
+      name: "ahmed",
+      number: "12345",
+      place: "work",
+      addresses: ["matbaa-haram"],
     },
   ]);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
@@ -315,10 +343,10 @@ function HomePage() {
 
   return (
     <>
-      <div>
+      <div className="p-4">
         <Header />
         <div className="flex justify-center items-center text-center p-6">
-          <div className="bg-white shadow-lg rounded-lg p-[5rem] relative">
+          <div className="bg-[#F3F3F3] shadow-lg rounded-lg p-[5rem] relative ">
             <div className="absolute top-0 -left-0 flex space-x-1">
               <button
                 onClick={() => setIsCreateOrder(true)}
@@ -326,7 +354,7 @@ function HomePage() {
                   isCreateOrder
                     ? "bg-primary  text-white : "
                     : "bg-[#283d3b2d] text-black"
-                } p-3 shadow-lg rounded-tl-none rounded-tr-none rounded-bl-none rounded-br-[1rem] font-medium text-[1rem]`}
+                } p-3 drop-shadow-2xl rounded-tl-none rounded-tr-none rounded-bl-none rounded-br-[1rem] font-medium text-[1rem]`}
               >
                 Create order
               </button>
@@ -336,7 +364,7 @@ function HomePage() {
                   !isCreateOrder
                     ? " bg-primary  text-white"
                     : "bg-[#283d3b3d] text-[#283D3B]"
-                } shadow-lg rounded-tl-none rounded-tr-none rounded-bl-none rounded-br-[1rem] p-3 font-medium`}
+                } drop-shadow-2xl  rounded-tl-none rounded-tr-none rounded-bl-none rounded-br-[1rem] p-3 font-medium flex items-center`}
               >
                 <FontAwesomeIcon icon={faUser} className="mr-2" />
                 New User
@@ -368,6 +396,17 @@ function HomePage() {
               />
             )}
           </div>
+        </div>
+        <div className="ml-[32rem] flex justify-center ">
+          <button
+            onClick={() => {
+              navigate("/create-order");
+            }}
+            className="bg-secondary text-primary  rounded-[.5rem] p-3 mt-2 text-[1.2rem] flex items-center font-semibold"
+          >
+            create order
+            <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
+          </button>
         </div>
       </div>
     </>

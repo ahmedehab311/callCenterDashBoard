@@ -13,13 +13,11 @@ function NewUser({ newCustomerData, setNewCustomerData, handlePopupSubmit }) {
       apartment: "",
       landingMark: "",
       additionalInfo: "",
-    })
+    });
   };
   return (
     <>
       <div>
-        <h3 className="text-lg font-bold mb-4">Add New Customer & Address</h3>
-
         {/* Customer Name */}
         <div className="flex items-center">
           <div className=" mr-2">
