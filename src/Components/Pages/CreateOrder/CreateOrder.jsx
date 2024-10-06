@@ -51,51 +51,52 @@ function CreateOrder() {
 
           {selectedButton === "order" && (
             <div className="mt-6">
-              <div className="flex items-center">
-                <button
-                  onClick={() => setSelectedMenu("all")}
-                  className={`${
-                    selectedMenu === "all"
-                      ? "bg-primary text-white"
-                      : "bg-[#283d3b2d] text-black"
-                  } p-2 mx-2 rounded-md`}
-                >
-                  All
-                </button>
-                <button
-                  onClick={() => setSelectedMenu("offers")}
-                  className={`${
-                    selectedMenu === "offers"
-                      ? "bg-primary text-white"
-                      : "bg-[#283d3b2d] text-black"
-                  } p-2 mx-2 rounded-md`}
-                >
-                  Offers
-                </button>
-                <button
-                  onClick={() => setSelectedMenu("pasta")}
-                  className={`${
-                    selectedMenu === "pasta"
-                      ? "bg-primary text-white"
-                      : "bg-[#283d3b2d] text-black"
-                  } p-2 mx-2 rounded-md`}
-                >
-                  Pasta
-                </button>
-                <button
-                  onClick={() => setSelectedMenu("drinks")}
-                  className={`${
-                    selectedMenu === "drinks"
-                      ? "bg-primary text-white"
-                      : "bg-[#283d3b2d] text-black"
-                  } p-2 mx-2 rounded-md`}
-                >
-                  Drinks
-                </button>
-              </div>
-
-              <div className="text-center mt-4">
-                {selectedMenu && <p>You selected: {selectedMenu}</p>}
+              <div className="flex   flex-col">
+                <div className="flex ml-[10rem]">
+                  <button
+                    onClick={() => setSelectedMenu("all")}
+                    className={`${
+                      selectedMenu === "all"
+                        ? "bg-primary text-white"
+                        : "bg-[#283d3b2d] text-black"
+                    } p-2 mx-2 rounded-md`}
+                  >
+                    All
+                  </button>
+                  <button
+                    onClick={() => setSelectedMenu("offers")}
+                    className={`${
+                      selectedMenu === "offers"
+                        ? "bg-primary text-white"
+                        : "bg-[#283d3b2d] text-black"
+                    } p-2 mx-2 rounded-md`}
+                  >
+                    Offers
+                  </button>
+                  <button
+                    onClick={() => setSelectedMenu("pasta")}
+                    className={`${
+                      selectedMenu === "pasta"
+                        ? "bg-primary text-white"
+                        : "bg-[#283d3b2d] text-black"
+                    } p-2 mx-2 rounded-md`}
+                  >
+                    Pasta
+                  </button>
+                  <button
+                    onClick={() => setSelectedMenu("drinks")}
+                    className={`${
+                      selectedMenu === "drinks"
+                        ? "bg-primary text-white"
+                        : "bg-[#283d3b2d] text-black"
+                    } p-2 mx-2 rounded-md`}
+                  >
+                    Drinks
+                  </button>
+                </div>
+                <div className=" ml-[15rem]  mt-8">
+                  {selectedMenu && <p>You selected: {selectedMenu}</p>}
+                </div>
               </div>
             </div>
           )}

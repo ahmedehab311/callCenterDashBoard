@@ -343,9 +343,9 @@ function HomePage() {
 
   return (
     <>
-      <div className="p-4">
+      <div className="py-1 px-3">
         <Header />
-        <div className="flex justify-center items-center text-center p-6">
+        <div className="flex justify-center items-center text-center p-2">
           <div className="bg-[#F3F3F3] shadow-lg rounded-lg p-[5rem] relative ">
             <div className="absolute top-0 -left-0 flex space-x-1">
               <button
