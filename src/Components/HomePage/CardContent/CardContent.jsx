@@ -1,15 +1,20 @@
 /* eslint-disable react/prop-types */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faMagnifyingGlass,faPen } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+import {
+  faPlus,
+  faMagnifyingGlass,
+  faPen,
+} from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useRef, useState } from "react";
 function OrderCard({
   customerNumber,
   setCustomerNumber,
   handleClear,
-  handleKeyDown,
   showTable,
   filteredCustomers,
   setFilteredCustomers,
+  customers,
+  setShowTable,
 }) {
   const [editIndex, setEditIndex] = useState(null);
   const [newAddress, setNewAddress] = useState("");
@@ -18,23 +23,39 @@ function OrderCard({
     number: "",
     place: "",
   });
+
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [noResults, setNoResults] = useState(true);
+  const inputRef = useRef(null);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+  useEffect(() => {
+    if (editIndex !== null && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [editIndex]);
 
-  // useEffect(() => {
-  //   const storedCustomers = loadFromLocalStorage();
-  //   if (storedCustomers.length > 0) {
-  //     setFilteredCustomers(storedCustomers);
-  //   }
-  // }, []);
+  const handleSearch = () => {
+    const filtered = customers.filter(
+      (customer) => customer.number === customerNumber
+    );
+    setFilteredCustomers(filtered);
+    setShowTable(filtered.length > 0);
+  };
 
-  // const saveToLocalStorage = (data) => {
-  //   localStorage.setItem("customers", JSON.stringify(data));
-  // };
-
-  const loadFromLocalStorage = () => {
-    const data = localStorage.getItem("customers");
-    return data ? JSON.parse(data) : [];
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if (editIndex !== null) {
+        if (newAddress.trim() !== "") {
+          handleConfirmEdit();
+        }
+      } else {
+        handleSearch();
+      }
+    }
   };
 
   const handleEditAddress = (customerIndex, addressIndex, address) => {
@@ -49,9 +70,7 @@ function OrderCard({
         editIndex.addressIndex
       ] = newAddress;
       setFilteredCustomers(updatedCustomers);
-      // saveToLocalStorage(updatedCustomers);
       setEditIndex(null);
-      setNewAddress("");
     }
   };
 
@@ -60,35 +79,9 @@ function OrderCard({
     const newCustomer = { ...newCustomerData, addresses: [newAddress] };
     updatedCustomers.push(newCustomer);
     setFilteredCustomers(updatedCustomers);
-    // saveToLocalStorage(updatedCustomers);
     setNewCustomerData({ name: "", number: "", place: "" });
     setNewAddress("");
     setIsPopupVisible(false);
-  };
-
-  // const handleDeleteAddress = (customerIndex, addressIndex) => {
-  //   const customer = filteredCustomers[customerIndex];
-  //   if (!customer || !customer.addresses) {
-  //     console.error("Customer or addresses not found");
-  //     return;
-  //   }
-
-  //   if (window.confirm("هل أنت متأكد من أنك تريد الحذف؟")) {
-  //     const updatedCustomers = [...filteredCustomers];
-  //     updatedCustomers[customerIndex].addresses.splice(addressIndex, 1);
-  //     setFilteredCustomers(updatedCustomers);
-  //     saveToLocalStorage(updatedCustomers);
-  //   }
-  // };
-
-  const handleSearch = () => {
-    const customers = loadFromLocalStorage();
-    const filtered = customers.filter((customer) =>
-      customer.number.includes(customerNumber)
-    );
-
-    setFilteredCustomers(filtered);
-    setNoResults(filtered.length === 0);
   };
 
   return (
@@ -101,6 +94,7 @@ function OrderCard({
             value={customerNumber}
             onChange={(e) => setCustomerNumber(e.target.value)}
             onKeyDown={handleKeyDown}
+            ref={inputRef}
             className="border rounded-l-md p-2 w-full"
           />
           <button
@@ -131,7 +125,7 @@ function OrderCard({
 
         {showTable && (
           <div className="mt-4">
-            <h3 className="text-md font-bold mb-2">Customer Info</h3>
+            {/* <h3 className="text-md font-bold mb-2">Customer Info</h3> */}
             <table className="min-w-full ">
               <thead className="bg-primary text-white ">
                 <tr>
@@ -153,9 +147,15 @@ function OrderCard({
               <tbody>
                 {filteredCustomers.map((customer, customerIndex) => (
                   <tr key={customerIndex}>
-                    <td className=" bg-white text-[1.2rem] font-semibold px-4 py-2">{customer.name}</td>
-                    <td className="bg-white  text-[1.2rem] font-normal px-4 py-2">{customer.number}</td>
-                    <td className="bg-white text-[1.2rem] font-normal px-4 py-2">{customer.place}</td>
+                    <td className=" bg-white text-[1.2rem] font-semibold px-4 py-2">
+                      {customer.name}
+                    </td>
+                    <td className="bg-white  text-[1.2rem] font-normal px-4 py-2">
+                      {customer.number}
+                    </td>
+                    <td className="bg-white text-[1.2rem] font-normal px-4 py-2">
+                      {customer.place}
+                    </td>
                     <td className="bg-white text-[1.2rem] font-normal px-4 py-2">
                       {customer.addresses.map((address, addressIndex) => (
                         <div key={addressIndex} className="mb-2">
@@ -163,10 +163,12 @@ function OrderCard({
                           editIndex.customerIndex === customerIndex &&
                           editIndex.addressIndex === addressIndex ? (
                             <input
+                              ref={inputRef}
                               type="text"
                               value={newAddress}
-                              onChange={(e) => setNewAddress(e.target.value)}
-                              className=" rounded p-1 mr-2 w-full"
+                              onChange={(e) => setNewAddress(e.target.value)} // تحديث الحالة عند تغيير القيمة
+                              onKeyDown={(e) => handleKeyDown(e)} // تمرير حدث مفتاح الضغط
+                              className="rounded p-1 mr-2 w-full" // إضافة أنماط
                             />
                           ) : (
                             <span className="mr-2">{address}</span>
@@ -199,19 +201,11 @@ function OrderCard({
                                   address
                                 )
                               }
-                              className=" text-primary  p-1"
+                              className="text-primary p-1"
                             >
                               <FontAwesomeIcon icon={faPen} />
                             </button>
                           )}
-                          {/* <button
-              className="bg-red-500 text-white rounded p-1"
-              onClick={() =>
-                handleDeleteAddress(customerIndex, addressIndex)
-              }
-            >
-              Delete
-            </button> */}
                         </div>
                       ))}
                     </td>
@@ -220,15 +214,15 @@ function OrderCard({
               </tbody>
             </table>
 
-          <div className="flex" >
-          <button
-              onClick={() => setIsPopupVisible(true)}
-              className="bg-[#FF934F] text-white rounded p-2 mt-4"
-            >
-              <FontAwesomeIcon icon={faPlus} className="mr-1" />
-              Add New Address
-            </button>
-          </div>
+            <div className="flex">
+              <button
+                onClick={() => setIsPopupVisible(true)}
+                className="bg-[#FF934F] text-white rounded p-2 mt-4"
+              >
+                <FontAwesomeIcon icon={faPlus} className="mr-1" />
+                Add New Address
+              </button>
+            </div>
             {isPopupVisible && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white rounded-lg p-4">
