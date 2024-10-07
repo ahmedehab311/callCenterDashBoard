@@ -5,7 +5,6 @@ import NewUser from "./NewUser/NewUser.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-
 function HomePage() {
   const navigate = useNavigate();
   const [customerNumber, setCustomerNumber] = useState("");
@@ -92,9 +91,6 @@ function HomePage() {
       setNewCustomerData({ name: "", number: "", place: "", address: "" });
     }
   };
-
-  
-
   return (
     <>
       <div className="py-1 px-3">
@@ -157,7 +153,7 @@ function HomePage() {
             className="bg-secondary text-primary  rounded-[.5rem] p-3 mt-2 text-[1.2rem] flex items-center font-semibold"
           >
             create order
-            <FontAwesomeIcon icon={faArrowRight} className="ml-2"  />
+            <FontAwesomeIcon icon={faArrowRight} className="ml-2" />
           </button>
         </div>
       </div>
