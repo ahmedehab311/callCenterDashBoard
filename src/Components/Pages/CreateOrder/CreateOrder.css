@@ -1,0 +1,10 @@
+.item-name {
+    min-height: 40px; /* ارتفاع ثابت */
+    width: 150px; /* عرض ثابت يمكن ضبطه حسب الحاجة */
+    display: flex;
+    align-items: center; /* لمحاذاة المحتوى عموديًا */
+    overflow: hidden; /* لمنع تجاوز النص */
+    text-overflow: ellipsis; /* لإضافة ثلاث نقاط (...) للنص الطويل */
+    white-space: nowrap; /* لمنع التفاف النص */
+  }
+  
