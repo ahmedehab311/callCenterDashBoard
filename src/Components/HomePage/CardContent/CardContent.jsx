@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -39,12 +40,13 @@ function OrderCard({
   }, [editIndex]);
 
   const handleSearch = () => {
-    const filtered = customers.filter(
-      (customer) => customer.number === customerNumber
-    );
-    setFilteredCustomers(filtered);
-    setShowTable(filtered.length > 0);
-  };
+  const filtered = customers.filter(
+    (customer) => customer.number === customerNumber
+  );
+  setFilteredCustomers(filtered);
+  setShowTable(filtered.length > 0);
+  setNoResults(filtered.length === 0); 
+};
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -111,21 +113,20 @@ function OrderCard({
           </button>
         </div>
 
-        {noResults && !showTable && (
-          <div className="text-primary bg-[#D9D9D9] w-[500px] h-[200px] flex items-center justify-center">
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="mr-4 text-[1.5rem]"
-            />
-            <h2 className="text-[1.1rem] font-semibold">
-              No matching search results
-            </h2>
-          </div>
-        )}
+        {filteredCustomers.length === 0 && !showTable && (
+        <div className="text-primary bg-[#D9D9D9] w-[500px] h-[200px] flex items-center justify-center">
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            className="mr-4 text-[1.5rem]"
+          />
+          <h2 className="text-[1.1rem] font-semibold">
+            No matching search results
+          </h2>
+        </div>
+      )}
 
         {showTable && (
           <div className="mt-4">
-            {/* <h3 className="text-md font-bold mb-2">Customer Info</h3> */}
             <table className="min-w-full ">
               <thead className="bg-primary text-white ">
                 <tr>
@@ -166,9 +167,9 @@ function OrderCard({
                               ref={inputRef}
                               type="text"
                               value={newAddress}
-                              onChange={(e) => setNewAddress(e.target.value)} // تحديث الحالة عند تغيير القيمة
-                              onKeyDown={(e) => handleKeyDown(e)} // تمرير حدث مفتاح الضغط
-                              className="rounded p-1 mr-2 w-full" // إضافة أنماط
+                              onChange={(e) => setNewAddress(e.target.value)}
+                              onKeyDown={(e) => handleKeyDown(e)}
+                              className="rounded p-1 mr-2 w-full"
                             />
                           ) : (
                             <span className="mr-2">{address}</span>

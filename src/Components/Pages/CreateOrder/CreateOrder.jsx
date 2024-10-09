@@ -53,10 +53,10 @@ function CreateOrder() {
     });
   };
 
-  const handleQuantityChange = (uniqueId) => {
+  const handleQuantityChange = (uniqueId, newQuantity) => {
     setItemQuantities((prevQuantities) => ({
       ...prevQuantities,
-      [uniqueId]: 1,
+      [uniqueId]: newQuantity,
     }));
   };
 
@@ -214,7 +214,10 @@ function CreateOrder() {
                 )}
 
                 {selectedItems.map((item) => (
-                  <div key={item.uniqueId} className="flex items-center  justify-between">
+                  <div
+                    key={item.uniqueId}
+                    className="flex items-center  justify-between"
+                  >
                     <div className="flex mt-8 items-center ">
                       <h2>x{itemQuantities[item.uniqueId]}</h2>
                       <img
@@ -224,7 +227,7 @@ function CreateOrder() {
                       />
                     </div>
                     <div className="mx-2">
-                      <h2   className="item-name">{item.name}</h2>
+                      <h2 className=" text-center">{item.name}</h2>
                       <Counter
                         value={itemQuantities[item.uniqueId]}
                         onChange={(newQuantity) =>
@@ -245,12 +248,69 @@ function CreateOrder() {
 
                       <FontAwesomeIcon
                         icon={faTrash}
-                        className="text-center cursor-pointer"
+                        className="text-center cursor-pointer text-[#d32f2f]"
                         onClick={() => removeItemFromCheckout(item.uniqueId)}
                       />
                     </div>
                   </div>
                 ))}
+                {selectedItems.length > 0 && (
+                  <div>
+                    <div className="border-t-[.1rem] border-[#283d3b41] mt-12"></div>
+
+                    <div className="mt-4 flex justify-between items-center mx-2">
+                      <div className="flex">
+                        <h4 className="mr-2 text-[#4F5744] text-[1rem] font-medium">
+                          Subtotal
+                        </h4>
+                        <h4>({selectedItems.length} items)</h4>{" "}
+                      </div>
+                      <h4 className="mr-2 text-[#4F5744] text-[1rem] font-medium">
+                        {selectedItems
+                          .reduce(
+                            (total, item) =>
+                              total +
+                              (item.price * itemQuantities[item.uniqueId] || 1),
+                            0
+                          )
+                          .toFixed(2)}{" "}
+                        EGP 
+                      </h4>
+                    </div>
+
+                    <div className="mt-4 flex justify-between items-center mx-2">
+                      <div className="flex">
+                        <h4 className="mr-2 text-[#4F5744] text-[1rem] font-medium">
+                          Delivery
+                        </h4>
+                      </div>
+                      <h4 className="mr-2 text-[#4F5744] text-[1rem] font-medium">
+                        30 EGP
+                      </h4>
+                    </div>
+
+                    <div className="border-t-[.1rem] border-[#283d3b41] mt-4"></div>
+
+                    <div className="mt-4 mb-4 flex justify-between items-center mx-2">
+                      <div className="flex ">
+                        <h4 className="mr-2 text-[#4F5744] text-[1rem] font-medium">
+                          Total
+                        </h4>
+                      </div>
+                      <h4 className="mr-2 text-[#4F5744] text-[1rem] font-medium">
+                        {(
+                          selectedItems.reduce(
+                            (total, item) =>
+                              total +
+                              (item.price * itemQuantities[item.uniqueId] || 1),
+                            0
+                          ) + 30
+                        ).toFixed(2)}{" "}
+                        EGP
+                      </h4>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
