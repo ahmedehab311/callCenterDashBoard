@@ -1,19 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 import itemsData from "./itemsData";
 import Counter from "./Counter";
 
 function CreateOrder() {
+  const inputRef = useRef(null);
   const [selectedButton, setSelectedButton] = useState("order");
   const [selectedMenu, setSelectedMenu] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectedOption, setSelectedOption] = useState("Delivery");
   const [itemQuantities, setItemQuantities] = useState({});
+  // const [editedAddress, setEditedAddress] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedAddress, setEditedAddress] = useState(
+    "11 ahmed khashaba - El nozha"
+  );
 
   useEffect(() => {
     setSelectedButton("order");
+  }, []);
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
+  const handleConfirmEdit = () => {
+    setIsEditing(false);
+  };
+  useEffect(() => {
+    // استرجاع العناصر من localStorage عند تحميل الصفحة
+    const storedItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+    const storedQuantities = JSON.parse(localStorage.getItem("cartQuantities")) || {};
+    
+    setSelectedItems(storedItems);
+    setItemQuantities(storedQuantities);
   }, []);
 
   const filteredItems = () => {
@@ -59,7 +84,15 @@ function CreateOrder() {
       [uniqueId]: newQuantity,
     }));
   };
-
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleConfirmEdit();
+    }
+  };
+  const handleCancelOrder = () => {
+    setSelectedItems([])
+    setItemQuantities({})
+  };
   return (
     <>
       <div className="bg-[#F3F3F3] min-h-screen">
@@ -183,13 +216,39 @@ function CreateOrder() {
               )}
 
               <div className="flex-1"></div>
-              <div className="bg-gray-200 rounded-md shadow ">
+              <div className="bg-gray-200 rounded-md shadow  items-center">
                 <div className="flex items-center justify-between p-3 bg-[#89937c54]">
-                  <div>
+                  <div className="flex flex-col">
                     <h2>Badr el Taher</h2>
-                    <h2>11 ahmed khashaba - El nozha</h2>
+                    <div className="flex items-center  space-x-2">
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editedAddress}
+                          onChange={(e) => setEditedAddress(e.target.value)}
+                          className="border p-1 rounded"
+                          onKeyDown={handleKeyDown}
+                          ref={inputRef}
+                        />
+                      ) : (
+                        <h2>{editedAddress}</h2>
+                      )}
+                      {isEditing ? (
+                        <button
+                          onClick={handleConfirmEdit}
+                          className="bg-green-500 text-white rounded p-1"
+                        >
+                          Confirm
+                        </button>
+                      ) : (
+                        <FontAwesomeIcon
+                          icon={faPen}
+                          className="text-xl ml-6 cursor-pointer"
+                          onClick={handleEditClick}
+                        />
+                      )}
+                    </div>
                   </div>
-                  <FontAwesomeIcon icon={faPen} className="text-xl ml-6" />
                 </div>
 
                 {selectedItems.length > 0 && (
@@ -248,7 +307,7 @@ function CreateOrder() {
 
                       <FontAwesomeIcon
                         icon={faTrash}
-                        className="text-center cursor-pointer text-[#d32f2f]"
+                        className="text-center cursor-pointer text-error"
                         onClick={() => removeItemFromCheckout(item.uniqueId)}
                       />
                     </div>
@@ -274,7 +333,7 @@ function CreateOrder() {
                             0
                           )
                           .toFixed(2)}{" "}
-                        EGP 
+                        EGP
                       </h4>
                     </div>
 
@@ -293,11 +352,11 @@ function CreateOrder() {
 
                     <div className="mt-4 mb-4 flex justify-between items-center mx-2">
                       <div className="flex ">
-                        <h4 className="mr-2 text-[#4F5744] text-[1rem] font-medium">
+                        <h4 className="mr-2 text-[#4F5744] text-[1.1rem] font-bold">
                           Total
                         </h4>
                       </div>
-                      <h4 className="mr-2 text-[#4F5744] text-[1rem] font-medium">
+                      <h4 className="mr-2 text-[#4F5744] text-[1.1rem] font-bold">
                         {(
                           selectedItems.reduce(
                             (total, item) =>
@@ -310,6 +369,35 @@ function CreateOrder() {
                       </h4>
                     </div>
                   </div>
+                )}
+                {selectedItems.length > 0 && (
+                  <>
+                    <div className="flex justify-between items-center mt-9">
+                      <div className="flex items-center">
+                        <button
+                          className=" bg-[#FF934F] text-wh rounded px-[1.3rem] py-[.5rem] ml-2 text-[1rem] font-semibold"
+                          // onClick={handleSubmitOrder}
+                        >
+                          Pay
+                        </button>
+                        <button
+                          className="  bg-wh text-primary rounded px-[1.3rem] py-[.5rem] ml-2 text-[1rem] font-semibold"
+                          // onClick={handleSubmitOrder}
+                        >
+                          Void
+                        </button>
+                      </div>
+
+                      <div>
+                        <button
+                          className=" text-error p-2 ml-2  text-[1rem] font-semibold"
+                          onClick={handleCancelOrder}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>

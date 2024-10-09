@@ -28,6 +28,7 @@ function OrderCard({
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [noResults, setNoResults] = useState(true);
   const inputRef = useRef(null);
+  const [isSearched, setIsSearched] = useState(false);
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -40,14 +41,14 @@ function OrderCard({
   }, [editIndex]);
 
   const handleSearch = () => {
-  const filtered = customers.filter(
-    (customer) => customer.number === customerNumber
-  );
-  setFilteredCustomers(filtered);
-  setShowTable(filtered.length > 0);
-  setNoResults(filtered.length === 0); 
-};
-
+    const filtered = customers.filter(
+      (customer) => customer.number === customerNumber
+    );
+    setFilteredCustomers(filtered);
+    setShowTable(filtered.length > 0);
+    setNoResults(filtered.length === 0);
+    setIsSearched(true); // تم الضغط على زر البحث
+  };
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       if (editIndex !== null) {
@@ -113,7 +114,7 @@ function OrderCard({
           </button>
         </div>
 
-        {filteredCustomers.length === 0 && !showTable && (
+        {isSearched && filteredCustomers.length === 0 && (
         <div className="text-primary bg-[#D9D9D9] w-[500px] h-[200px] flex items-center justify-center">
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
