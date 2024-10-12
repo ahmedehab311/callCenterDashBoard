@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -5,15 +6,20 @@ import {
   faMagnifyingGlass,
   faPen,
 } from "@fortawesome/free-solid-svg-icons";
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
+=======
+import { useEffect, useRef, useState } from "react";
+>>>>>>> 15dd3e66077a6efe2141e7f3a6a4004a203e5ddc
 function OrderCard({
   customerNumber,
   setCustomerNumber,
   handleClear,
-  handleKeyDown,
   showTable,
   filteredCustomers,
   setFilteredCustomers,
+  customers,
+  setShowTable,
 }) {
   const [editIndex, setEditIndex] = useState(null);
   const [newAddress, setNewAddress] = useState("");
@@ -22,23 +28,41 @@ function OrderCard({
     number: "",
     place: "",
   });
+
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [noResults, setNoResults] = useState(true);
+  const inputRef = useRef(null);
+  const [isSearched, setIsSearched] = useState(false);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+  useEffect(() => {
+    if (editIndex !== null && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [editIndex]);
 
-  // useEffect(() => {
-  //   const storedCustomers = loadFromLocalStorage();
-  //   if (storedCustomers.length > 0) {
-  //     setFilteredCustomers(storedCustomers);
-  //   }
-  // }, []);
-
-  // const saveToLocalStorage = (data) => {
-  //   localStorage.setItem("customers", JSON.stringify(data));
-  // };
-
-  const loadFromLocalStorage = () => {
-    const data = localStorage.getItem("customers");
-    return data ? JSON.parse(data) : [];
+  const handleSearch = () => {
+    const filtered = customers.filter(
+      (customer) => customer.number === customerNumber
+    );
+    setFilteredCustomers(filtered);
+    setShowTable(filtered.length > 0);
+    setNoResults(filtered.length === 0);
+    setIsSearched(true); // تم الضغط على زر البحث
+  };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if (editIndex !== null) {
+        if (newAddress.trim() !== "") {
+          handleConfirmEdit();
+        }
+      } else {
+        handleSearch();
+      }
+    }
   };
 
   const handleEditAddress = (customerIndex, addressIndex, address) => {
@@ -53,9 +77,7 @@ function OrderCard({
         editIndex.addressIndex
       ] = newAddress;
       setFilteredCustomers(updatedCustomers);
-      // saveToLocalStorage(updatedCustomers);
       setEditIndex(null);
-      setNewAddress("");
     }
   };
 
@@ -64,35 +86,9 @@ function OrderCard({
     const newCustomer = { ...newCustomerData, addresses: [newAddress] };
     updatedCustomers.push(newCustomer);
     setFilteredCustomers(updatedCustomers);
-    // saveToLocalStorage(updatedCustomers);
     setNewCustomerData({ name: "", number: "", place: "" });
     setNewAddress("");
     setIsPopupVisible(false);
-  };
-
-  // const handleDeleteAddress = (customerIndex, addressIndex) => {
-  //   const customer = filteredCustomers[customerIndex];
-  //   if (!customer || !customer.addresses) {
-  //     console.error("Customer or addresses not found");
-  //     return;
-  //   }
-
-  //   if (window.confirm("هل أنت متأكد من أنك تريد الحذف؟")) {
-  //     const updatedCustomers = [...filteredCustomers];
-  //     updatedCustomers[customerIndex].addresses.splice(addressIndex, 1);
-  //     setFilteredCustomers(updatedCustomers);
-  //     saveToLocalStorage(updatedCustomers);
-  //   }
-  // };
-
-  const handleSearch = () => {
-    const customers = loadFromLocalStorage();
-    const filtered = customers.filter((customer) =>
-      customer.number.includes(customerNumber)
-    );
-
-    setFilteredCustomers(filtered);
-    setNoResults(filtered.length === 0);
   };
 
   return (
@@ -105,6 +101,7 @@ function OrderCard({
             value={customerNumber}
             onChange={(e) => setCustomerNumber(e.target.value)}
             onKeyDown={handleKeyDown}
+            ref={inputRef}
             className="border rounded-l-md p-2 w-full"
           />
           <button
@@ -121,21 +118,20 @@ function OrderCard({
           </button>
         </div>
 
-        {noResults && !showTable && (
-          <div className="text-primary bg-[#D9D9D9] w-[500px] h-[200px] flex items-center justify-center">
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              className="mr-4 text-[1.5rem]"
-            />
-            <h2 className="text-[1.1rem] font-semibold">
-              No matching search results
-            </h2>
-          </div>
-        )}
+        {isSearched && filteredCustomers.length === 0 && (
+        <div className="text-primary bg-[#D9D9D9] w-[500px] h-[200px] flex items-center justify-center">
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            className="mr-4 text-[1.5rem]"
+          />
+          <h2 className="text-[1.1rem] font-semibold">
+            No matching search results
+          </h2>
+        </div>
+      )}
 
         {showTable && (
           <div className="mt-4">
-            <h3 className="text-md font-bold mb-2">Customer Info</h3>
             <table className="min-w-full ">
               <thead className="bg-primary text-white ">
                 <tr>
@@ -173,10 +169,12 @@ function OrderCard({
                           editIndex.customerIndex === customerIndex &&
                           editIndex.addressIndex === addressIndex ? (
                             <input
+                              ref={inputRef}
                               type="text"
                               value={newAddress}
                               onChange={(e) => setNewAddress(e.target.value)}
-                              className=" rounded p-1 mr-2 w-full"
+                              onKeyDown={(e) => handleKeyDown(e)}
+                              className="rounded p-1 mr-2 w-full"
                             />
                           ) : (
                             <span className="mr-2">{address}</span>
@@ -209,19 +207,11 @@ function OrderCard({
                                   address
                                 )
                               }
-                              className=" text-primary  p-1"
+                              className="text-primary p-1"
                             >
                               <FontAwesomeIcon icon={faPen} />
                             </button>
                           )}
-                          {/* <button
-              className="bg-red-500 text-white rounded p-1"
-              onClick={() =>
-                handleDeleteAddress(customerIndex, addressIndex)
-              }
-            >
-              Delete
-            </button> */}
                         </div>
                       ))}
                     </td>

@@ -7,6 +7,7 @@ export default {
         primary: "#283D3B",
         wh: "#fff",
         secondary: "#B2EF9B",
+        error:"#d32f2f"
       },
     },
   },

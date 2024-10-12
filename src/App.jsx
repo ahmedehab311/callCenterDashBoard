@@ -3,7 +3,7 @@
 import "normalize.css";
 import { Routes, Route, Link } from "react-router-dom";
 import { Suspense, lazy } from "react";
-import ErrorBoundary from "./Components/Pages/CreateOrder/ErrorBoundary.jsx";
+import ErrorBoundary from "./Components/Pages/ErrorBoundary.jsx";
 import HomePage from "./Components/HomePage/HomePage.jsx";
 import CreateOrder from "./Components/Pages/CreateOrder/CreateOrder.jsx";
 function App() {
