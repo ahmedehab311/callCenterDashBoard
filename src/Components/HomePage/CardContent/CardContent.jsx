@@ -1,6 +1,10 @@
 /* eslint-disable react/prop-types */
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faMagnifyingGlass,faPen } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlus,
+  faMagnifyingGlass,
+  faPen,
+} from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 function OrderCard({
   customerNumber,
@@ -153,9 +157,15 @@ function OrderCard({
               <tbody>
                 {filteredCustomers.map((customer, customerIndex) => (
                   <tr key={customerIndex}>
-                    <td className=" bg-white text-[1.2rem] font-semibold px-4 py-2">{customer.name}</td>
-                    <td className="bg-white  text-[1.2rem] font-normal px-4 py-2">{customer.number}</td>
-                    <td className="bg-white text-[1.2rem] font-normal px-4 py-2">{customer.place}</td>
+                    <td className=" bg-white text-[1.2rem] font-semibold px-4 py-2">
+                      {customer.name}
+                    </td>
+                    <td className="bg-white  text-[1.2rem] font-normal px-4 py-2">
+                      {customer.number}
+                    </td>
+                    <td className="bg-white text-[1.2rem] font-normal px-4 py-2">
+                      {customer.place}
+                    </td>
                     <td className="bg-white text-[1.2rem] font-normal px-4 py-2">
                       {customer.addresses.map((address, addressIndex) => (
                         <div key={addressIndex} className="mb-2">
@@ -220,15 +230,15 @@ function OrderCard({
               </tbody>
             </table>
 
-          <div className="flex" >
-          <button
-              onClick={() => setIsPopupVisible(true)}
-              className="bg-[#FF934F] text-white rounded p-2 mt-4"
-            >
-              <FontAwesomeIcon icon={faPlus} className="mr-1" />
-              Add New Address
-            </button>
-          </div>
+            <div className="flex">
+              <button
+                onClick={() => setIsPopupVisible(true)}
+                className="bg-[#FF934F] text-white rounded p-2 mt-4"
+              >
+                <FontAwesomeIcon icon={faPlus} className="mr-1" />
+                Add New Address
+              </button>
+            </div>
             {isPopupVisible && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div className="bg-white rounded-lg p-4">
